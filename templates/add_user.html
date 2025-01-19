@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dodaj korisnika</title>
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background-color: #FFFFFF;
+        color: black;
+    }
+    h1 {
+        text-align: center;
+        color: #4A3267;
+    }
+    form {
+        width: 50%;
+        margin: 20px auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        background-color: #F7B9C4;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+    label {
+        font-weight: bold;
+        color: #4A3267;
+        display: block;
+        margin-bottom: 5px;
+    }
+    input, select {
+        width: calc(100% - 20px);
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+    button {
+        width: 20%;
+        padding: 10px 20px;
+        background-color: #4A3267;
+        color: white;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+    button:hover {
+        background-color: #37254C;
+    }
+    .back-button {
+        display: block;
+        width: fit-content;
+        margin: 20px auto;
+        padding: 10px 20px;
+        background-color: #4A3267;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        text-align: center;
+        font-weight: bold;
+    }
+    .back-button:hover {
+        background-color: #37254C;
+    }
+</style>
+<body>
+    <h1>Dodaj korisnika</h1>
+    <form action="/add-user" method="POST">
+        <label for="korisnicko_ime">Korisničko ime:</label>
+        <input type="text" id="korisnicko_ime" name="korisnicko_ime" required><br><br>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br><br>
+
+        <label for="lozinka">Lozinka:</label>
+        <input type="password" id="lozinka" name="lozinka" required><br><br>
+
+        <label for="tip_korisnika">Tip korisnika:</label>
+        <select id="tip_korisnika" name="tip_korisnika">
+            {% for naziv in user_types %}
+                <option value="{{ naziv }}">{{ naziv }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <button type="submit">Dodaj korisnika</button>
+    </form>
+    <a href="/dashboard/{{ prijavljeni_korisnik_id }}" class="back-button">Povratak na Dashboard</a>
+</body>
+</html>

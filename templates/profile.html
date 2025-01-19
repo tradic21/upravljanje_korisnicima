@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil</title>
+<style>
+    /* Opći stilovi */
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background-color: #FFFFFF;
+    }
+    h1 {
+        text-align: center;
+        color: #4A3267;
+    }
+
+    /* Stil za tablicu */
+    .profile-details {
+        width: 50%;
+        margin: 20px auto;
+        border-collapse: collapse;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+    .profile-details th {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #ccc;
+        background-color: #DE638A;
+        color: white;
+    }
+    .highlighted-row th {
+        background-color: #f58dae; 
+        color: black;
+    }
+    .profile-details td {
+        background-color: #F7B9C4;
+        color: black;
+        padding: 10px;
+        border: 1px solid #ccc;
+    }
+    .profile-details tr:nth-child(even) td {
+        background-color: #F3D9E5;
+    }
+
+    /* Stil za profilnu sliku */
+    .profile-picture {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        background-color: #CCCCCC;
+        margin: 20px auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Stil za gumbe */
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px; /* Razmak između gumba */
+        margin-top: 20px;
+    }
+    
+    .action-buttons button {
+        padding: 8px 15px;
+        background-color: #c6bade;
+        color: black;
+        border: none;
+        border-radius: 5px;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    .action-buttons button:hover {
+        background-color: #b4a9c6;
+    }
+
+    .action-buttons form {
+        display: flex;
+        align-items: center;
+        gap: 10px; /* Razmak između elemenata u svakom obrascu */
+    }
+
+
+    /* Stil za unos datoteke */
+    .file-upload {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .file-upload label {
+        font-size: 14px;
+        font-weight: bold;
+        color: #4A3267;
+    }
+    .file-upload input[type="file"] {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 5px;
+        background-color: #F3D9E5;
+        cursor: pointer;
+    }
+    .file-upload input[type="file"]:hover {
+        background-color: #F7B9C4;
+    }
+
+    /* Gumb za povratak */
+    .back-button {
+        display: block;
+        width: fit-content;
+        margin: 20px auto;
+        padding: 10px 20px;
+        background-color: #4A3267;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        text-align: center;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
+    .back-button:hover {
+        background-color: #37254C;
+    }
+</style>
+</head>
+<body>
+    <h1>Profil korisnika</h1>
+
+    <!-- Prikaz profilne slike -->
+    <div class="profile-picture">
+        {% if has_profile_picture %}
+            <img src="/profile-picture/{{ user.id }}?timestamp={{ timestamp }}" 
+                 alt="Profilna slika" 
+                 style="width: 100%; height: 100%; border-radius: 50%;">
+        {% else %}
+            <p style="color: #FFFFFF; font-size: 14px; text-align: center;">Nema slike</p>
+        {% endif %}
+    </div>
+    
+    <!-- Akcije za dodavanje i brisanje slike -->
+    <div class="action-buttons">
+        <form action="/upload-profile-picture" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="korisnik_id" value="{{ user.id }}">
+            <div class="file-upload">
+                <label for="file">Odaberite profilnu sliku:</label>
+                <input type="file" id="file" name="file" accept="image/*" required>
+            </div>
+            <button type="submit">Dodaj sliku</button>
+        </form>
+        
+        <form action="/delete-profile-picture/{{ user.id }}" method="POST">
+            <button type="submit">Obriši sliku</button>
+        </form>
+    </div>
+    
+    
+    
+
+    <!-- Korisnički detalji -->
+    <table class="profile-details">
+        <tr>
+            <th>ID:</th>
+            <td>{{ user.id }}</td>
+        </tr>
+        <tr class="highlighted-row">
+            <th>Korisničko ime:</th>
+            <td>{{ user.korisnicko_ime }}</td>
+        </tr>
+        <tr>
+            <th>Email:</th>
+            <td>{{ user.email }}</td>
+        </tr>
+        <tr class="highlighted-row">
+            <th>Tip korisnika:</th>
+            <td>{{ user.tip_korisnika }}</td>
+        </tr>
+    </table>
+    
+    <!-- Povratak na Dashboard -->
+    <a href="/dashboard/{{ user.id }}" class="back-button">
+        <i class="fa-solid fa-arrow-left"></i> Povratak na Dashboard
+    </a>
+</body>
+</html>

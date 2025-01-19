@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rezultati pretraživanja</title>
+</head>
+<body>
+    <h1>Rezultati pretraživanja</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Korisničko ime</th>
+                <th>Email</th>
+                <th>Tip korisnika</th>
+                <th>Akcije</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rezultati %}
+            <tr>
+                <td>{{ row[0] }}</td>
+                <td>{{ row[1] }}</td>
+                <td>{{ row[2] }}</td>
+                <td>{{ row[3] }}</td>
+                <td>
+                    <a href="/view/{{ row[0] }}">Pregledaj</a>
+                    <a href="/edit/{{ row[0] }}">Uredi</a>
+                    <form action="/delete-user/{{ row[0] }}" method="POST" style="display:inline;">
+                        <button type="submit">Obriši</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <title>Pregled knjiga</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #FFFFFF;
+        }
+        h1 {
+            color: #4A3267;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th {
+            background-color: #DE638A;
+            color: white;
+            padding: 8px;
+            text-align: left;
+        }
+        td {
+            padding: 8px;
+            text-align: left;
+            color: black;
+        }
+        tr:nth-child(odd) td {
+            background-color: #F7B9C4;
+        }
+        tr:nth-child(even) td {
+            background-color: #F3D9E5;
+        }
+        .button {
+            padding: 10px 20px;
+            background-color: #4A3267;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            display: inline-block;
+            font-weight: bold;
+        }
+        .button:hover {
+            background-color: #37254C;
+        }
+        .download-link {
+            color: #4A3267;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+        .top-controls {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+    </style>
+    <script>
+        function deleteBook(bookId, rowElement) {
+            if (confirm("Jeste li sigurni da želite obrisati ovu knjigu?")) {
+                fetch(`/delete-book/${bookId}`, { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            rowElement.remove();
+                            alert(data.message);
+                        } else {
+                            alert(data.error || "Došlo je do greške prilikom brisanja knjige.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Greška prilikom komunikacije s poslužiteljem:", error);
+                        alert("Došlo je do greške prilikom komunikacije s poslužiteljem.");
+                    });
+            }
+        }
+    </script>
+</head>
+<body>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h1 style="margin: 0;">Pregled knjiga</h1>
+        <div>
+            <a href="/profile" title="Profil" style="text-decoration: none; color: #4A3267; font-weight: bold; display: inline-flex; align-items: center; margin-right: 20px;">
+                <i class="fa-solid fa-user-circle" style="font-size: 24px; margin-right: 8px;"></i> 
+                Profil
+            </a>
+            <a href="/logout" title="Odjava" style="text-decoration: none; color: #4A3267; font-weight: bold; display: inline-flex; align-items: center;">
+                <i class="fa-solid fa-right-from-bracket" style="font-size: 24px; margin-right: 8px;"></i>
+                Odjava
+            </a>
+        </div>
+    </div>
+
+    <h2>Dobro došao/la, {{ korisnicko_ime }}!</h2>
+
+    <hr style="border: none; border-top: 2px solid #4A3267; margin: 10px 10px 30px;">
+
+    <!-- Prikaz gumba za dodavanje knjiga samo za zaposlenike -->
+    {% if prijavljeni_tip_korisnika == 'Zaposlenik' %}
+        <div class="top-controls">
+            <a href="/add-book-page" class="button">
+                <i class="fa-solid fa-book"></i> Dodaj knjigu
+            </a>
+        </div>
+    {% endif %}
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Naslov</th>
+                <th>Autor</th>
+                <th>Godina</th>
+                <th>Žanr</th>
+                <th>Datoteka</th>
+                {% if prijavljeni_tip_korisnika == 'Zaposlenik' %}
+                    <th>Akcije</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in books %}
+            <tr>
+                <td>{{ book[0] }}</td>
+                <td>{{ book[1] }}</td>
+                <td>{{ book[2] }}</td>
+                <td>{{ book[3] }}</td>
+                <td>{{ book[4] }}</td>
+                <td>
+                    {% if book[5] %}
+                        <a href="/download-book/{{ book[0] }}" class="download-link">Preuzmi datoteku</a>
+                    {% else %}
+                        Nema datoteke
+                    {% endif %}
+                </td>
+                {% if prijavljeni_tip_korisnika == 'Zaposlenik' %}
+                <td>
+                    <a href="#" class="button" style="background-color: #4A3267;" onclick="deleteBook({{ book[0] }}, this.closest('tr'))">
+                        <i class="fa-solid fa-trash-can"></i> Obriši
+                    </a>
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

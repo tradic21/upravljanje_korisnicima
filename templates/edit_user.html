@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uredi korisnika</title>
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background-color: #FFFFFF;
+    }
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #4A3267;
+    }
+    form {
+        width: 50%;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        background-color: #F3D9E5;
+    }
+    label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+        color: #4A3267;
+    }
+    input, select {
+        width: 95%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #FFFFFF;
+        color: black;
+    }
+    button {
+        display: block;
+        width: 20%;
+        padding: 10px;
+        background-color: #4A3267;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #37254C;
+    }
+    .back-button {
+        display: block;
+        width: fit-content;
+        margin: 20px auto;
+        padding: 10px 20px;
+        background-color: #4A3267;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        text-align: center;
+        font-weight: bold;
+    }
+    .back-button:hover {
+        background-color: #37254C;
+    }
+</style>
+<body>
+    <h1>Uredi korisnika</h1>
+    <form action="/update-user/{{ user.id }}" method="POST">
+        <label for="korisnicko_ime">Korisničko ime:</label>
+        <input type="text" id="korisnicko_ime" name="korisnicko_ime" value="{{ user.korisnicko_ime }}" required>
+        
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" value="{{ user.email }}" required>
+        
+        <label for="lozinka">Nova lozinka:</label>
+        <input type="password" id="lozinka" name="lozinka" required>
+        
+        <label for="tip_korisnika">Tip korisnika:</label>
+        <select id="tip_korisnika" name="tip_korisnika">
+            {% for naziv in user_types %}
+                <option value="{{ naziv }}" {% if naziv == user.tip_korisnika %}selected{% endif %}>
+                    {{ naziv }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <!-- Meta podaci -->
+        <label for="ime">Ime:</label>
+    <input type="text" id="ime" name="ime" value="{{ user.meta.ime }}" required>
+
+    <label for="prezime">Prezime:</label>
+    <input type="text" id="prezime" name="prezime" value="{{ user.meta.prezime }}" required>
+
+    <label for="adresa">Adresa:</label>
+    <input type="text" id="adresa" name="adresa" value="{{ user.meta.adresa }}" required>
+
+    <label for="telefon">Telefon:</label>
+    <input type="text" id="telefon" name="telefon" value="{{ user.meta.telefon }}" required>
+
+    <label for="grad">Grad:</label>
+    <input type="text" id="grad" name="grad" value="{{ user.meta.grad }}" required>
+
+    <label for="drzava">Država:</label>
+    <input type="text" id="drzava" name="drzava" value="{{ user.meta.drzava }}" required>
+
+        
+        <button type="submit">Spremi promjene</button>
+    </form>
+    <a href="/dashboard/{{ prijavljeni_korisnik_id }}" class="back-button">Povratak na Dashboard</a>
+</body>
+</html>

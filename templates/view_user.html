@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <title>Detalji korisnika</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #FFFFFF;
+        }
+        h1 {
+            text-align: center;
+            color: #4A3267;
+        }
+        .user-details {
+            width: 50%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .user-details th {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ccc;
+            background-color: #DE638A;
+        }
+        .highlighted-row th {
+            background-color: #f58dae; 
+            color: black;
+        }          
+        .user-details td {
+            background-color: #F7B9C4;
+            color: black;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+        .user-details tr:nth-child(even) td {
+            background-color: #F3D9E5;
+        }
+        .back-button {
+            display: block;
+            width: fit-content;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #4A3267;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .back-button:hover {
+            background-color: #37254C;
+        }
+    </style>
+</head>
+<body>
+    <h1>Detalji korisnika</h1>
+    <table class="user-details">
+        <tr>
+            <th>ID:</th>
+            <td>{{ user.id }}</td>
+        </tr>
+        <tr class="highlighted-row">
+            <th>Korisničko ime:</th>
+            <td>{{ user.korisnicko_ime }}</td>
+        </tr>
+        <tr>
+            <th>Email:</th>
+            <td>{{ user.email }}</td>
+        </tr>
+        <tr class="highlighted-row">
+            <th>Lozinka:</th>
+            <td>{{ user.lozinka }}</td>
+        </tr>
+        <tr>
+            <th>Tip korisnika:</th>
+            <td>{{ user.tip_korisnika }}</td>
+        </tr>
+        <tr class="highlighted-row">
+            <th>Zadnja prijava:</th>
+            <td>{{ user.zadnja_prijava }}</td>
+        </tr>
+        <tr>
+            <th>Broj prijava:</th>
+            <td>{{ user.broj_prijava }}</td>
+        </tr>
+        <tr class="highlighted-row">
+            <th>Ime:</th>
+            <td>{{ user.meta.ime }}</td>
+        </tr>
+        <tr>
+            <th>Prezime:</th>
+            <td>{{ user.meta.prezime }}</td>
+        </tr>
+        <tr class="highlighted-row">
+            <th>Adresa:</th>
+            <td>{{ user.meta.adresa }}</td>
+        </tr>
+        <tr>
+            <th>Telefon:</th>
+            <td>{{ user.meta.telefon }}</td>
+        </tr>
+        <tr class="highlighted-row">
+            <th>Grad:</th>
+            <td>{{ user.meta.grad }}</td>
+        </tr>
+        <tr>
+            <th>Država:</th>
+            <td>{{ user.meta.drzava }}</td>
+        </tr>
+    </table>
+    <a href="/dashboard/{{ prijavljeni_korisnik_id }}" class="back-button">
+        <i class="fa-solid fa-arrow-left"></i> Povratak na Dashboard
+    </a>
+</body>
+</html>

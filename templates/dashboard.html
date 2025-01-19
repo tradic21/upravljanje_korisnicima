@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <title>Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #FFFFFF;
+        }
+        h1 {
+            color: #4A3267;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th {
+            background-color: #DE638A;
+            color: white;
+            padding: 8px;
+            text-align: left;
+        }
+        td {
+            padding: 8px;
+            text-align: left;
+            color: black;
+        }
+        tr:nth-child(odd) td {
+            background-color: #F7B9C4;
+        }
+        tr:nth-child(even) td {
+            background-color: #F3D9E5;
+        }
+        .action-icons a, .action-link {
+            text-decoration: none; 
+            color: black; 
+            font-size: 14px; 
+            font-weight: bold; 
+            margin-right: 30px; 
+        }
+        .action-icons a {
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            margin-right: 20px;
+            color: white;
+        }
+        .action-icons a:hover {
+            color: #4A3267;
+            text-decoration: underline;
+            color: white;
+        }
+        .button {
+            padding: 10px 20px;
+            background-color: #4A3267;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            display: inline-block;
+            font-weight: bold;
+        }
+        .button:hover {
+            background-color: #37254C;
+        }       
+    </style>
+    <script>
+        // Funkcija za brisanje korisnika
+        function deleteUser(userId, rowElement) {
+            if (confirm("Jeste li sigurni da želite obrisati ovog korisnika?")) {
+                fetch(`/delete-user/${userId}`, { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Uklanja redak iz tablice nakon uspješnog brisanja
+                            rowElement.remove();
+                            alert(data.message);
+                        } else {
+                            alert(data.error || "Došlo je do greške prilikom brisanja korisnika.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Greška prilikom slanja zahtjeva:", error);
+                        alert("Došlo je do greške prilikom komunikacije s poslužiteljem.");
+                    });
+            }
+        }
+    </script>
+</head>
+<body>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h1 style="margin: 0;">Kontrolna ploča</h1>
+        <div>
+            <a href="/profile" title="Profil" style="text-decoration: none; color: #4A3267; font-weight: bold; display: inline-flex; align-items: center; margin-right: 20px;">
+                <i class="fa-solid fa-user-circle" style="font-size: 24px; margin-right: 8px;"></i> 
+                Profil
+            </a>
+            <a href="/logout" title="Odjava" style="text-decoration: none; color: #4A3267; font-weight: bold; display: inline-flex; align-items: center;">
+                <i class="fa-solid fa-right-from-bracket" style="font-size: 24px; margin-right: 8px;"></i>
+                Odjava
+            </a>
+        </div>
+    </div>
+    
+    
+    <h2>Dobro došao/la, {{ korisnicko_ime }}!</h2>
+    
+    <hr style="border: none; border-top: 2px solid #4A3267; margin: 10px 10px 30px;">
+    
+    <!-- Prikaži gumb samo za admin korisnika -->
+    {% if prijavljeni_tip_korisnika == 'Administrator' %}
+        <div style="text-align: right; margin-bottom: 20px;">
+            <a href="/add-user-page" class="button">
+                <i class="fa-solid fa-user-plus"></i>Dodaj korisnika
+            </a>
+        </div>
+    {% endif %}   
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Korisničko ime</th>
+                <th>Email</th>
+                <th>Lozinka</th>
+                <th>Tip korisnika</th>
+                <th>Akcije</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data %}
+            <tr>
+                <td>{{ row[0] }}</td>
+                <td>{{ row[1] }}</td>
+                <td>{{ row[2] }}</td>
+                <td>{{ row[3] }}</td>
+                <td>{{ row[4] }}</td>
+                <td class="action-icons">
+                    <a href="/view/{{ row[0] }}" class="button" title="Pregledaj">
+                        <i class="fa-solid fa-eye"></i> Pregledaj
+                    </a>
+                    <a href="/edit/{{ row[0] }}" class="button" title="Uredi">
+                        <i class="fa-solid fa-pen"></i> Uredi
+                    </a>
+                    <a href="#" title="Obriši" class="button delete-link" onclick="deleteUser({{ row[0] }}, this.closest('tr'))">
+                        <i class="fa-solid fa-trash-can"></i> Obriši
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

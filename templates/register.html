@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registracija</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #FFFFFF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        form {
+            max-width: 400px;
+            width: 100%;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #F7B9C4;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            text-align: center;
+            color: #4A3267;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #4A3267;
+        }
+
+        input, select, button {
+            width: 90%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        input:focus, select:focus {
+            border-color: #4A3267;
+            outline: none;
+        }
+
+        button {
+            background-color: #4A3267;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #37254C;
+        }
+
+        #message {
+            margin-top: 20px;
+            font-size: 1rem;
+            text-align: center;
+            color: #4A3267;
+        }
+    </style>
+</head>
+<body>
+    <form id="register-form" method="POST">
+        <h1>Registracija</h1>
+        <label for="korisnicko_ime">Korisničko ime:</label>
+        <input type="text" id="korisnicko_ime" name="korisnicko_ime" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="lozinka">Lozinka:</label>
+        <input type="password" id="lozinka" name="lozinka" required>
+        
+        <button type="submit">Registriraj se</button>
+        <div id="message"></div>
+    </form>
+
+    <script>
+        const form = document.getElementById('register-form');
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch('/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams(data),
+                });
+
+                const messageDiv = document.getElementById('message');
+
+                if (response.redirected) {
+                    window.location.href = response.url;
+                } else {
+                    const result = await response.json();
+                    if (response.ok) {
+                        messageDiv.textContent = result.message || 'Registracija uspješna!';
+                        messageDiv.style.color = 'green';
+                    } else {
+                        messageDiv.textContent = result.error || 'Došlo je do greške.';
+                        messageDiv.style.color = 'red';
+                    }
+                }
+            } catch (error) {
+                const messageDiv = document.getElementById('message');
+                messageDiv.textContent = 'Došlo je do greške prilikom komunikacije s poslužiteljem.';
+                messageDiv.style.color = 'red';
+            }
+        });
+    </script>
+</body>
+</html>
