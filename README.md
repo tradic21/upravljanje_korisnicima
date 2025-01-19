@@ -10,8 +10,8 @@
    - Postaviti korisnika i lozinku baze podataka:
      CREATE USER myuser WITH ENCRYPTED PASSWORD 'mypassword';
      GRANT ALL PRIVILEGES ON DATABASE tbp_projekt_probni TO myuser;
-     Napomena: Zamijeni myuser i mypassword vlastitim korisničkim podacima.)
-     *Zamijeniti user i passwor s odgovarajućim podacima unutar upravljanje_korsnicima.py*
+     - Napomena: Zamijeni myuser i mypassword vlastitim korisničkim podacima.)
+     - **Zamijeniti user i passwor s odgovarajućim podacima unutar upravljanje_korsnicima.py**
       def get_db_connection():
        conn = psycopg2.connect(
            host="localhost",
