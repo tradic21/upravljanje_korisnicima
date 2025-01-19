@@ -8,8 +8,17 @@
    - Potreban je PostgreSQL: https://www.postgresql.org/download/
    - Kreirati bazu podataka: CREATE DATABASE tbp_projekt_probni;
    - Postaviti korisnika i lozinku baze podataka:
-     CREATE USER tea WITH ENCRYPTED PASSWORD '1234';
-     GRANT ALL PRIVILEGES ON DATABASE tbp_projekt_probni TO tea;
+     CREATE USER myuser WITH ENCRYPTED PASSWORD 'mypassword';
+     GRANT ALL PRIVILEGES ON DATABASE tbp_projekt_probni TO myuser;
+     Napomena: Zamijeni myuser i mypassword vlastitim korisničkim podacima.)
+     # Zamijeniti user i passwor s odgovarajućim podacima unutar upravljanje_korsnicima.py
+      def get_db_connection():
+       conn = psycopg2.connect(
+           host="localhost",
+           database="tbp_projekt_probni",
+           user="tea",
+           password="1234"
+       )
    - Uvoz dump datoteke u bazu: preuzeti tbp_projekt_probni.dump iz GitHub repozitorija
      pg_restore -U tea -d tbp_projekt_probni -1 tbp_projekt_probni.dump
 4. Pokretanje aplikacije
