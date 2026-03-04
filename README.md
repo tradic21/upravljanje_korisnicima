@@ -1,4 +1,4 @@
-# upravljanje_korisnicima
+# Aplikacija za upravljanje korisnicima
 1. Postavljanje virtualnog okruženja
    - python3 -m venv venv_flask
    - source venv_flask/bin/activate
